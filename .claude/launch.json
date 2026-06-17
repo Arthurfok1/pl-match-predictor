@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "pl-predictor-ui",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["ui/app.py"],
+      "port": 5050,
+      "autoPort": true
+    }
+  ]
+}
