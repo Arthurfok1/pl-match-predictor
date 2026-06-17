@@ -27,7 +27,6 @@
       align-items: center;
     }
 
-    /* ── Header ── */
     header {
       width: 100%;
       background: #1a0020;
@@ -47,23 +46,10 @@
       border-radius: 4px;
       text-transform: uppercase;
     }
-    header h1 {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-    header span.sub {
-      margin-left: auto;
-      color: var(--muted);
-      font-size: 13px;
-    }
+    header h1 { font-size: 20px; font-weight: 700; }
+    header span.sub { margin-left: auto; color: var(--muted); font-size: 13px; }
 
-    /* ── Main card ── */
-    main {
-      width: 100%;
-      max-width: 820px;
-      padding: 40px 24px 60px;
-    }
+    main { width: 100%; max-width: 820px; padding: 40px 24px 60px; }
 
     .pitch-card {
       background: var(--card);
@@ -72,7 +58,6 @@
       padding: 36px 40px;
       box-shadow: 0 8px 40px rgba(0,0,0,0.5);
     }
-
     .pitch-card h2 {
       font-size: 15px;
       text-transform: uppercase;
@@ -81,12 +66,11 @@
       margin-bottom: 28px;
     }
 
-    /* ── Team selector row ── */
     .teams-row {
       display: grid;
       grid-template-columns: 1fr 60px 1fr;
       gap: 12px;
-      align-items: end;
+      align-items: start;
       margin-bottom: 28px;
     }
     .team-block label {
@@ -97,7 +81,22 @@
       color: var(--muted);
       margin-bottom: 8px;
     }
-    .team-block select {
+    .vs-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      margin-top: 27px;
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    /* ── Custom dropdown ── */
+    .custom-select { position: relative; }
+
+    .select-trigger {
       width: 100%;
       padding: 12px 16px;
       background: #2a0035;
@@ -106,27 +105,69 @@
       color: var(--white);
       font-size: 15px;
       font-weight: 600;
-      appearance: none;
       cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       transition: border-color 0.2s;
+      user-select: none;
     }
-    .team-block select:hover,
-    .team-block select:focus {
-      border-color: var(--green);
+    .select-trigger:hover,
+    .select-trigger.open { border-color: var(--green); }
+    .select-trigger .placeholder { color: var(--muted); font-weight: 400; }
+    .select-trigger .arrow {
+      font-size: 10px;
+      color: var(--muted);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .select-trigger.open .arrow { transform: rotate(180deg); }
+
+    .select-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0; right: 0;
+      background: #2a0035;
+      border: 1px solid var(--green);
+      border-radius: 8px;
+      z-index: 100;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    }
+    .select-dropdown.open { display: block; }
+
+    .select-search {
+      width: 100%;
+      padding: 10px 14px;
+      background: #1a0025;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      color: var(--white);
+      font-size: 13px;
       outline: none;
     }
-    .vs-badge {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 48px;
-      font-size: 13px;
-      font-weight: 900;
-      color: var(--muted);
-      letter-spacing: 1px;
-    }
+    .select-search::placeholder { color: var(--muted); }
 
-    /* ── Predict button ── */
+    .select-options {
+      max-height: 220px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .select-option {
+      padding: 10px 14px;
+      font-size: 14px;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .select-option:hover,
+    .select-option.focused { background: rgba(0,255,133,0.1); color: var(--white); }
+    .select-option.selected { color: var(--green); font-weight: 700; }
+    .select-option.hidden { display: none; }
+
+    /* ── Button ── */
     .btn-predict {
       width: 100%;
       padding: 15px;
@@ -145,7 +186,6 @@
     .btn-predict:active { transform: translateY(0); }
     .btn-predict:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-    /* ── Error ── */
     .error-msg {
       margin-top: 16px;
       padding: 12px 16px;
@@ -157,21 +197,10 @@
       display: none;
     }
 
-    /* ── Result panel ── */
-    #result-panel {
-      margin-top: 32px;
-      display: none;
-    }
-    .result-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-    .result-header .fixture {
-      font-size: 18px;
-      font-weight: 700;
-    }
+    /* ── Result ── */
+    #result-panel { margin-top: 32px; display: none; }
+    .result-header { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+    .result-header .fixture { font-size: 18px; font-weight: 700; }
     .result-header .fixture span { color: var(--green); }
     .prediction-pill {
       margin-left: auto;
@@ -185,33 +214,20 @@
       white-space: nowrap;
     }
 
-    /* ── Probability bars ── */
     .prob-rows { display: flex; flex-direction: column; gap: 14px; }
     .prob-row { display: flex; flex-direction: column; gap: 6px; }
-    .prob-label-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-    }
+    .prob-label-row { display: flex; justify-content: space-between; font-size: 13px; }
     .prob-label { color: var(--text); font-weight: 600; }
     .prob-pct   { color: var(--green); font-weight: 700; font-size: 14px; }
-    .bar-track {
-      height: 10px;
-      background: #2a0035;
-      border-radius: 999px;
-      overflow: hidden;
-    }
+    .bar-track { height: 10px; background: #2a0035; border-radius: 999px; overflow: hidden; }
     .bar-fill {
-      height: 100%;
-      border-radius: 999px;
-      transition: width 0.7s cubic-bezier(0.4,0,0.2,1);
-      width: 0%;
+      height: 100%; border-radius: 999px;
+      transition: width 0.7s cubic-bezier(0.4,0,0.2,1); width: 0%;
     }
-    .bar-fill.home  { background: var(--green); }
-    .bar-fill.draw  { background: #a78bfa; }
-    .bar-fill.away  { background: #60a5fa; }
+    .bar-fill.home { background: var(--green); }
+    .bar-fill.draw { background: #a78bfa; }
+    .bar-fill.away { background: #60a5fa; }
 
-    /* ── Confidence indicator ── */
     .confidence {
       margin-top: 24px;
       padding: 14px 18px;
@@ -224,51 +240,24 @@
       gap: 8px;
       align-items: flex-start;
     }
-    .confidence .icon { font-size: 16px; flex-shrink: 0; }
 
-    /* ── Footer ── */
-    footer {
-      margin-top: 40px;
-      color: var(--muted);
-      font-size: 12px;
-      text-align: center;
-      padding-bottom: 32px;
-    }
+    footer { margin-top: 40px; color: var(--muted); font-size: 12px; text-align: center; padding-bottom: 32px; }
 
-    /* ── Spinner ── */
     .spinner {
-      display: inline-block;
-      width: 16px; height: 16px;
-      border: 2px solid var(--purple);
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      vertical-align: middle;
-      margin-right: 6px;
+      display: inline-block; width: 16px; height: 16px;
+      border: 2px solid var(--purple); border-top-color: transparent;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+      vertical-align: middle; margin-right: 6px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── History ── */
     #history { margin-top: 36px; }
-    #history h3 {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
+    #history h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 12px; }
     .history-list { display: flex; flex-direction: column; gap: 8px; }
     .history-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 14px;
-      background: #120018;
-      border: 1px solid #3a0050;
-      border-radius: 8px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: border-color 0.15s;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 14px; background: #120018; border: 1px solid #3a0050;
+      border-radius: 8px; font-size: 13px; cursor: pointer; transition: border-color 0.15s;
     }
     .history-item:hover { border-color: var(--green); }
     .history-item .fix { color: var(--text); }
@@ -290,22 +279,40 @@
     <div class="teams-row">
       <div class="team-block">
         <label>Home Team</label>
-        <select id="home-select">
-          <option value="">— Choose team —</option>
-          {% for team in teams %}
-          <option value="{{ team }}">{{ team }}</option>
-          {% endfor %}
-        </select>
+        <div class="custom-select" id="home-select-wrap">
+          <div class="select-trigger" id="home-trigger" onclick="toggleDropdown('home')">
+            <span class="placeholder" id="home-display">— Choose team —</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="select-dropdown" id="home-dropdown">
+            <input class="select-search" type="text" placeholder="Search team…" oninput="filterOptions('home', this.value)" id="home-search">
+            <div class="select-options" id="home-options">
+              {% for team in teams %}
+              <div class="select-option" data-value="{{ team }}" onclick="selectTeam('home', '{{ team }}')">{{ team }}</div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
       </div>
+
       <div class="vs-badge">VS</div>
+
       <div class="team-block">
         <label>Away Team</label>
-        <select id="away-select">
-          <option value="">— Choose team —</option>
-          {% for team in teams %}
-          <option value="{{ team }}">{{ team }}</option>
-          {% endfor %}
-        </select>
+        <div class="custom-select" id="away-select-wrap">
+          <div class="select-trigger" id="away-trigger" onclick="toggleDropdown('away')">
+            <span class="placeholder" id="away-display">— Choose team —</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="select-dropdown" id="away-dropdown">
+            <input class="select-search" type="text" placeholder="Search team…" oninput="filterOptions('away', this.value)" id="away-search">
+            <div class="select-options" id="away-options">
+              {% for team in teams %}
+              <div class="select-option" data-value="{{ team }}" onclick="selectTeam('away', '{{ team }}')">{{ team }}</div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -317,7 +324,6 @@
         <div class="fixture" id="fixture-label"></div>
         <div class="prediction-pill" id="prediction-pill"></div>
       </div>
-
       <div class="prob-rows">
         <div class="prob-row">
           <div class="prob-label-row">
@@ -341,7 +347,6 @@
           <div class="bar-track"><div class="bar-fill away" id="bar-away"></div></div>
         </div>
       </div>
-
       <div class="confidence" id="confidence-box"></div>
     </div>
   </div>
@@ -352,29 +357,80 @@
   </div>
 </main>
 
-<footer>
-  Built with scikit-learn · 7,768 EPL matches · 35 rolling features
-</footer>
+<footer>Built with scikit-learn · 7,768 EPL matches · 35 rolling features</footer>
 
 <script>
-  const history = [];
+  const selected = { home: '', away: '' };
+  const history  = [];
+
+  function toggleDropdown(side) {
+    const trigger  = document.getElementById(side + '-trigger');
+    const dropdown = document.getElementById(side + '-dropdown');
+    const search   = document.getElementById(side + '-search');
+    const isOpen   = dropdown.classList.contains('open');
+
+    // Close all dropdowns first
+    closeAll();
+
+    if (!isOpen) {
+      trigger.classList.add('open');
+      dropdown.classList.add('open');
+      search.value = '';
+      filterOptions(side, '');
+      search.focus();
+    }
+  }
+
+  function closeAll() {
+    ['home', 'away'].forEach(s => {
+      document.getElementById(s + '-trigger').classList.remove('open');
+      document.getElementById(s + '-dropdown').classList.remove('open');
+    });
+  }
+
+  function filterOptions(side, query) {
+    const opts = document.querySelectorAll(`#${side}-options .select-option`);
+    const q = query.toLowerCase();
+    opts.forEach(opt => {
+      opt.classList.toggle('hidden', !opt.dataset.value.toLowerCase().includes(q));
+    });
+  }
+
+  function selectTeam(side, team) {
+    selected[side] = team;
+    const display = document.getElementById(side + '-display');
+    display.textContent = team;
+    display.classList.remove('placeholder');
+
+    // Mark selected in list
+    document.querySelectorAll(`#${side}-options .select-option`).forEach(opt => {
+      opt.classList.toggle('selected', opt.dataset.value === team);
+    });
+
+    closeAll();
+    document.getElementById('error-msg').style.display = 'none';
+  }
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.custom-select')) closeAll();
+  });
+
+  // Keyboard nav: Escape closes
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeAll();
+    if (e.key === 'Enter' && !document.querySelector('.select-dropdown.open')) predict();
+  });
 
   async function predict() {
-    const home = document.getElementById('home-select').value;
-    const away = document.getElementById('away-select').value;
+    const home = selected.home;
+    const away = selected.away;
     const btn  = document.getElementById('predict-btn');
     const err  = document.getElementById('error-msg');
-
     err.style.display = 'none';
 
-    if (!home || !away) {
-      showError('Please select both teams.');
-      return;
-    }
-    if (home === away) {
-      showError('Home and away teams must be different.');
-      return;
-    }
+    if (!home || !away) { showError('Please select both teams.'); return; }
+    if (home === away)  { showError('Home and away teams must be different.'); return; }
 
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>Predicting…';
@@ -397,35 +453,29 @@
   }
 
   function showResult(data) {
-    const probs = data.probabilities;
-    const keys  = Object.keys(probs);
-    const homeKey = keys.find(k => k.includes(data.home));
-    const awayKey = keys.find(k => k.includes(data.away));
-    const drawKey = 'Draw';
+    const probs   = data.probabilities;
+    const homeKey = Object.keys(probs).find(k => k.includes(data.home));
+    const awayKey = Object.keys(probs).find(k => k.includes(data.away));
 
     document.getElementById('fixture-label').innerHTML =
       `<span>${data.home}</span> vs <span>${data.away}</span>`;
     document.getElementById('prediction-pill').textContent = data.prediction;
-
     document.getElementById('label-home').textContent = homeKey;
     document.getElementById('label-away').textContent = awayKey;
 
     setBar('home', probs[homeKey]);
-    setBar('draw', probs[drawKey]);
+    setBar('draw', probs['Draw']);
     setBar('away', probs[awayKey]);
 
-    // Confidence message
     const maxProb = Math.max(...Object.values(probs));
     let msg;
-    if (maxProb >= 65) msg = '🔥 Strong signal — the model is confident in this prediction.';
+    if (maxProb >= 65)      msg = '🔥 Strong signal — the model is confident in this prediction.';
     else if (maxProb >= 50) msg = '📊 Moderate confidence — one outcome is favoured but it\'s competitive.';
-    else msg = '⚖️ Close call — probabilities are tight. Treat this as a toss-up.';
-    document.getElementById('confidence-box').innerHTML =
-      `<span class="icon">💡</span><span>${msg}</span>`;
+    else                    msg = '⚖️ Close call — probabilities are tight. Treat this as a toss-up.';
+    document.getElementById('confidence-box').innerHTML = `<span>💡</span><span>${msg}</span>`;
 
     document.getElementById('result-panel').style.display = 'block';
 
-    // History
     history.unshift({ home: data.home, away: data.away, prediction: data.prediction });
     if (history.length > 5) history.pop();
     renderHistory();
@@ -433,9 +483,7 @@
 
   function setBar(id, pct) {
     document.getElementById(`pct-${id}`).textContent = pct.toFixed(1) + '%';
-    setTimeout(() => {
-      document.getElementById(`bar-${id}`).style.width = pct + '%';
-    }, 50);
+    setTimeout(() => { document.getElementById(`bar-${id}`).style.width = pct + '%'; }, 50);
   }
 
   function showError(msg) {
@@ -449,23 +497,18 @@
     const list = document.getElementById('history-list');
     wrap.style.display = 'block';
     list.innerHTML = history.map((h, i) => `
-      <div class="history-item" onclick="loadHistory(${i})">
+      <div class="history-item" onclick="reloadHistory(${i})">
         <span class="fix">${h.home} vs ${h.away}</span>
         <span class="res">${h.prediction}</span>
       </div>`).join('');
   }
 
-  function loadHistory(i) {
+  function reloadHistory(i) {
     const h = history[i];
-    document.getElementById('home-select').value = h.home;
-    document.getElementById('away-select').value = h.away;
+    selectTeam('home', h.home);
+    selectTeam('away', h.away);
     predict();
   }
-
-  // Allow Enter key to trigger prediction
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter') predict();
-  });
 </script>
 
 </body>
