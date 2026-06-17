@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+*.egg-info/
+.env
+logs/
+node_modules/
+outputs/pl_predictor_doc.js
